@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package demo.tosu;
+
+service Tosu {
+    rpc Hello(Request) returns (Response) {}
+}
+
+message Request {
+    string name = 1;
+}
+
+message Response {
+    uint32 code = 1;
+}

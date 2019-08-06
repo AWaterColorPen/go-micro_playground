@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package demo.tosu;
+
+import "google/api/annotations.proto";
+
+service Tosu {
+    rpc Hello(Request) returns (Response) {
+        option (google.api.http) = {
+			post: "/greeter/hello"
+			body: "*"
+		};
+    }
+}
+
+message Request {
+    string name = 1;
+}
+
+message Response {
+    uint32 code = 1;
+}
