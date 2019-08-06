@@ -9,11 +9,11 @@ import (
 
 func main() {
 	service := micro.NewService(
-		micro.Name("tosu.yaml"),
+		micro.Name("tosui.yaml"),
 		micro.Version("latest"),
 	)
 
-	client := tosu.NewTosuService("tosu.yaml", service.Client())
+	client := tosu.NewTosuService("tosui.yaml", service.Client())
 	rsp, err := client.Hello(context.TODO(), &tosu.Request{
 		Name: "John",
 	})

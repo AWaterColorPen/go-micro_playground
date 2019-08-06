@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: tosui-grpc
+  labels:
+    app: tosui
+    tier: backend
+    role: grpc
+spec:
+  type: NodePort
+  ports:
+    - port: 20001
+      targetPort: 20001
+  selector:
+    app: redis
+    tier: backend
+    role: grpc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: tosui
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: tosui
+        tier: backend
+        role: grpc
+    spec:
+      containers:
+      - name: tosui
+        command: [
+          "/tosui-grpc",
+          "--server_address=0.0.0.0:20001",
+          "--broker_address=0.0.0.0:20101"
+	    ]
+        image: microhq/tosu-srv:kubernetes
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 20001
+          name: tosui-grpc-port

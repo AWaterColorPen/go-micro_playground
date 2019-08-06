@@ -18,7 +18,7 @@ func (g *Tosu) Hello(ctx context.Context, req *tosu.Request, rsp *tosu.Response)
 
 func main() {
 	service := k8s.NewService(
-		micro.Name("tosu.yaml"),
+		micro.Name("tosui.yaml"),
 		micro.Version("latest"),
 	)
 
