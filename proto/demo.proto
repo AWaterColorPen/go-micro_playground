@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package demo.tosu;
+package tosui;
 
-service Tosu {
+service Tosui {
     rpc Hello(Request) returns (Response) {}
 }
 

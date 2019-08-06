@@ -1,13 +1,13 @@
 syntax = "proto3";
 
-package demo.tosu;
+package tosui.api;
 
 import "google/api/annotations.proto";
 
-service Tosu {
+service Tosui {
     rpc Hello(Request) returns (Response) {
         option (google.api.http) = {
-			post: "/greeter/hello"
+			post: "/api/hello"
 			body: "*"
 		};
     }

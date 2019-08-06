@@ -2,15 +2,16 @@ package main
 
 import (
 	"context"
-	tosu "demo/proto"
 	k8s "github.com/micro/examples/kubernetes/go/micro"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-plugins/wrapper/monitoring/prometheus"
+	tosui "go-micro_playground/proto"
 	"log"
 )
 
 type Tosu struct{}
 
-func (g *Tosu) Hello(ctx context.Context, req *tosu.Request, rsp *tosu.Response) error {
+func (g *Tosu) Hello(ctx context.Context, req *tosui.Request, rsp *tosui.Response) error {
 	rsp.Code = 0
 	log.Print(req.Name)
 	return nil
@@ -18,8 +19,9 @@ func (g *Tosu) Hello(ctx context.Context, req *tosu.Request, rsp *tosu.Response)
 
 func main() {
 	service := k8s.NewService(
-		micro.Name("tosui.yaml"),
+		micro.Name("tosui"),
 		micro.Version("latest"),
+		micro.WrapHandler(prometheus.NewHandlerWrapper()),
 	)
 
 	service.Init()

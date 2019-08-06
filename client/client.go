@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	tosu "demo/proto"
+	tosui "go-micro_playground/proto"
 	"fmt"
 	"github.com/micro/go-micro"
 )
@@ -13,7 +13,7 @@ func main() {
 		micro.Version("latest"),
 	)
 
-	client := tosu.NewTosuService("tosui.yaml", service.Client())
+	client := tosui.NewTosuService("tosui.yaml", service.Client())
 	rsp, err := client.Hello(context.TODO(), &tosu.Request{
 		Name: "John",
 	})

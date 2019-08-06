@@ -2,11 +2,11 @@
 // source: proto/api/api.proto
 
 /*
-Package demo_tosu is a reverse proxy.
+Package tosui_api is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package demo_tosu
+package tosui_api
 
 import (
 	"context"
@@ -28,7 +28,7 @@ var _ status.Status
 var _ = runtime.String
 var _ = utilities.NewDoubleArray
 
-func request_Tosu_Hello_0(ctx context.Context, marshaler runtime.Marshaler, client TosuClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Tosui_Hello_0(ctx context.Context, marshaler runtime.Marshaler, client TosuiClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq Request
 	var metadata runtime.ServerMetadata
 
@@ -45,9 +45,9 @@ func request_Tosu_Hello_0(ctx context.Context, marshaler runtime.Marshaler, clie
 
 }
 
-// RegisterTosuHandlerFromEndpoint is same as RegisterTosuHandler but
+// RegisterTosuiHandlerFromEndpoint is same as RegisterTosuiHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterTosuHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterTosuiHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return err
@@ -67,23 +67,23 @@ func RegisterTosuHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux,
 		}()
 	}()
 
-	return RegisterTosuHandler(ctx, mux, conn)
+	return RegisterTosuiHandler(ctx, mux, conn)
 }
 
-// RegisterTosuHandler registers the http handlers for service Tosu to "mux".
+// RegisterTosuiHandler registers the http handlers for service Tosui to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterTosuHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterTosuHandlerClient(ctx, mux, NewTosuClient(conn))
+func RegisterTosuiHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterTosuiHandlerClient(ctx, mux, NewTosuiClient(conn))
 }
 
-// RegisterTosuHandlerClient registers the http handlers for service Tosu
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "TosuClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "TosuClient"
+// RegisterTosuiHandlerClient registers the http handlers for service Tosui
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "TosuiClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "TosuiClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "TosuClient" to call the correct interceptors.
-func RegisterTosuHandlerClient(ctx context.Context, mux *runtime.ServeMux, client TosuClient) error {
+// "TosuiClient" to call the correct interceptors.
+func RegisterTosuiHandlerClient(ctx context.Context, mux *runtime.ServeMux, client TosuiClient) error {
 
-	mux.Handle("POST", pattern_Tosu_Hello_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Tosui_Hello_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -92,14 +92,14 @@ func RegisterTosuHandlerClient(ctx context.Context, mux *runtime.ServeMux, clien
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_Tosu_Hello_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Tosui_Hello_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Tosu_Hello_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Tosui_Hello_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -107,9 +107,9 @@ func RegisterTosuHandlerClient(ctx context.Context, mux *runtime.ServeMux, clien
 }
 
 var (
-	pattern_Tosu_Hello_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"greeter", "hello"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Tosui_Hello_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"api", "hello"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (
-	forward_Tosu_Hello_0 = runtime.ForwardResponseMessage
+	forward_Tosui_Hello_0 = runtime.ForwardResponseMessage
 )

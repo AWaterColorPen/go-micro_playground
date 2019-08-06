@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+apiVersion: v1
 kind: Service
 metadata:
   name: tosui-grpc
@@ -42,3 +42,8 @@ spec:
         ports:
         - containerPort: 20001
           name: tosui-grpc-port
+  selector:
+    matchLabels:
+      app: tosui
+      tier: backend
+      role: grpc
