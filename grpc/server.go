@@ -9,9 +9,9 @@ import (
 	"log"
 )
 
-type Tosu struct{}
+type Tosui struct{}
 
-func (g *Tosu) Hello(ctx context.Context, req *tosui.Request, rsp *tosui.Response) error {
+func (g *Tosui) Hello(ctx context.Context, req *tosui.Request, rsp *tosui.Response) error {
 	rsp.Code = 0
 	log.Print(req.Name)
 	return nil

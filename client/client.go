@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	tosui "go-micro_playground/proto"
 	"fmt"
 	"github.com/micro/go-micro"
+	tosui "go-micro_playground/proto"
 )
 
 func main() {
@@ -13,8 +13,8 @@ func main() {
 		micro.Version("latest"),
 	)
 
-	client := tosui.NewTosuService("tosui.yaml", service.Client())
-	rsp, err := client.Hello(context.TODO(), &tosu.Request{
+	client := tosui.NewTosuiService("tosui", service.Client())
+	rsp, err := client.Hello(context.TODO(), &tosui.Request{
 		Name: "John",
 	})
 

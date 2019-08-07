@@ -158,7 +158,7 @@ func (c *tosuiClient) Hello(ctx context.Context, in *Request, opts ...grpc.CallO
 	return out, nil
 }
 
-// TosuiServer is the server API for Tosui service.
+// TosuiServer is the grpc API for Tosui service.
 type TosuiServer interface {
 	Hello(context.Context, *Request) (*Response, error)
 }
