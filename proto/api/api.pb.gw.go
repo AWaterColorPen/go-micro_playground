@@ -10,6 +10,7 @@ package tosui_api
 
 import (
 	"context"
+	"go-micro_playground/proto"
 	"io"
 	"net/http"
 
@@ -29,7 +30,7 @@ var _ = runtime.String
 var _ = utilities.NewDoubleArray
 
 func request_Tosui_Hello_0(ctx context.Context, marshaler runtime.Marshaler, client TosuiClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq Request
+	var protoReq tosui.Request
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)

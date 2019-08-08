@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package tosui.api;
 
+import "go-micro_playground/proto/demo.proto";
 import "google/api/annotations.proto";
 
 service Tosui {
@@ -11,12 +12,4 @@ service Tosui {
 			body: "*"
 		};
     }
-}
-
-message Request {
-    string name = 1;
-}
-
-message Response {
-    uint32 code = 1;
 }
