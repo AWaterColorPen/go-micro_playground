@@ -7,7 +7,6 @@ metadata:
     tier: backend
     role: grpc
 spec:
-  type: NodePort
   ports:
     - port: 20001
       targetPort: 20001
@@ -35,13 +34,27 @@ spec:
         command: [
           "/tosui-grpc",
           "--server_address=0.0.0.0:20001",
-          "--broker_address=0.0.0.0:20101"
+          "--broker_address=0.0.0.0:20003"
 	    ]
         image: microhq/tosu-srv:kubernetes
         imagePullPolicy: Always
         ports:
         - containerPort: 20001
           name: tosui-grpc-port
+      - name: health
+        command: [
+          "/health",
+          "--health_address=0.0.0.0:20011",
+          "--server_name=tosui",
+          "--server_address=0.0.0.0:20001"
+        ]
+        image: microhq/health:kubernetes
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 20011
+          initialDelaySeconds: 3
+          periodSeconds: 3
   selector:
     matchLabels:
       app: tosui

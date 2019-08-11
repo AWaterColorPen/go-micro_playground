@@ -9,12 +9,13 @@ import (
 
 func main() {
 	service := micro.NewService(
-		micro.Name("tosui.yaml"),
+		micro.Name("tosui.client"),
 		micro.Version("latest"),
 	)
 
+	service.Init()
 	client := tosui.NewTosuiService("tosui", service.Client())
-	rsp, err := client.Hello(context.TODO(), &tosui.Request{
+	rsp, err := client.Hello(context.Background(), &tosui.Request{
 		Name: "John",
 	})
 
@@ -23,5 +24,5 @@ func main() {
 		return
 	}
 
-	fmt.Println(rsp.Code)
+	fmt.Println(rsp)
 }

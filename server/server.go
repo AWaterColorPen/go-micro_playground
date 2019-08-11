@@ -3,10 +3,8 @@ package main
 import (
 	"context"
 	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/service/grpc"
 	tosui "go-micro_playground/proto"
 	"log"
-	"time"
 )
 
 type Tosui struct{}
@@ -18,10 +16,9 @@ func (g *Tosui) Hello(ctx context.Context, req *tosui.Request, rsp *tosui.Respon
 }
 
 func main() {
-	service := grpc.NewService(
-		micro.Name("tosui.grpc"),
-		micro.RegisterTTL(time.Second*30),
-		micro.RegisterInterval(time.Second*10),
+	service := micro.NewService(
+		micro.Name("tosui"),
+		micro.Version("latest"),
 	)
 
 	service.Init()
