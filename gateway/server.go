@@ -20,10 +20,8 @@ func run() error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
-	handlerRPC
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-
 	err := tosui.RegisterTosuiHandlerFromEndpoint(ctx, mux, *endpoint, opts)
 	if err != nil {
 		return err
