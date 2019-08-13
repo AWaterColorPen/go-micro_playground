@@ -4,15 +4,14 @@ import (
 	"context"
 	"flag"
 	"fmt"
-
-	api "go-micro_playground/proto/api"
 	tosui "go-micro_playground/proto"
+	api "go-micro_playground/proto/api"
 	"google.golang.org/grpc"
 )
 
 var (
 	// the go.micro.srv.greeter address
-	endpoint = flag.String("endpoint", "localhost:20001", "grpc grpc address")
+	endpoint = flag.String("endpoint", "localhost:20001", "grpc address")
 )
 
 
