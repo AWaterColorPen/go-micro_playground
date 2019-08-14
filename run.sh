@@ -10,8 +10,10 @@ go run ./client/client.go --registry=mdns
 
 ## micro server
 go run ./server/server.go --registry=mdns --server_address=localhost:20001
+go run ./server/cli/client.go --registry=consul
 
 # gateway
+go run ./gateway/server.go
 go run ./gateway/cli/client.go
 
 # grpc

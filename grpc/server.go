@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/service/grpc"
+	"github.com/micro/go-micro/server/grpc"
 	tosui "go-micro_playground/proto"
 	"log"
 	"time"
@@ -18,7 +18,8 @@ func (g *Tosui) Hello(ctx context.Context, req *tosui.Request, rsp *tosui.Respon
 }
 
 func main() {
-	service := grpc.NewService(
+	service := micro.NewService(
+		micro.Server(grpc.NewServer()),
 		micro.Name("tosui.grpc"),
 		micro.RegisterTTL(time.Second*30),
 		micro.RegisterInterval(time.Second*10),
