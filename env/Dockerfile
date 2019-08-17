@@ -25,10 +25,21 @@ RUN go get -u github.com/golang/protobuf/proto
 RUN go get -u github.com/golang/protobuf/protoc-gen-go
 RUN go get -u github.com/golang/protobuf/ptypes
 
+# grpc
+RUN go get -u google.golang.org/grpc
+
 # opentracing
 RUN go get -u github.com/opentracing/opentracing-go
 
-# grpc
-RUN go get -u google.golang.org/grpc
+# prometheus
+RUN go get -u github.com/prometheus/client_golang/prometheus
+
+RUN apt-get update
+RUN apt-get install -y locales
+RUN sed -ie 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
+RUN locale-gen
+ENV LANG en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
 
 WORKDIR $GOPATH
