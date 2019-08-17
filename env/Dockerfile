@@ -17,7 +17,7 @@ RUN go get -u github.com/lestrrat-go/file-rotatelogs
 
 # elastic log
 RUN go get -u github.com/olivere/elastic
-RUN go get -u gopkg.in/sohlich/elogrus.v3
+RUN go get -u github.com/sohlich/elogrus
 
 # protobuf
 RUN go get -u github.com/golang/protobuf/jsonpb
