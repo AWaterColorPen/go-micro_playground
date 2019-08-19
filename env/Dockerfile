@@ -34,6 +34,13 @@ RUN go get -u github.com/opentracing/opentracing-go
 # prometheus
 RUN go get -u github.com/prometheus/client_golang/prometheus
 
+# micro config
+RUN go get -u github.com/BurntSushi/toml
+RUN go get -u github.com/fsnotify/fsnotify
+RUN go get -u github.com/hashicorp/hcl
+RUN go get -u github.com/imdario/mergo
+RUN go get -u github.com/bitly/go-simplejson
+
 RUN apt-get update
 RUN apt-get install -y locales
 RUN sed -ie 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
