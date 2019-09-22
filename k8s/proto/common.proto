@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package tencho;
+
+message Request {
+    string name = 1;
+    string query = 2;
+}
+
+message Response {
+    uint32 code = 1;
+}

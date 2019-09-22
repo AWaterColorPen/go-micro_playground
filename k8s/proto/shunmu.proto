@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package tencho;
+
+import "k8s/proto/common.proto";
+
+service ShunMu {
+    rpc A(Request) returns (Response) {}
+}

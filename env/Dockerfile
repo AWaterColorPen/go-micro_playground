@@ -41,6 +41,7 @@ RUN go get -u github.com/hashicorp/hcl
 RUN go get -u github.com/imdario/mergo
 RUN go get -u github.com/bitly/go-simplejson
 
+# support utf8
 RUN apt-get update
 RUN apt-get install -y locales
 RUN sed -ie 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
