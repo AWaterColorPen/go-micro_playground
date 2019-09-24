@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/baseimages bash
 #protoc --proto_path=$GOPATH/src:. --micro_out=. --go_out=plugins=grpc:. --go_out=. proto/shunmu.proto
 
 #protoc -I/usr/local/include -I. \

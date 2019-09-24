@@ -8,6 +8,12 @@ RUN go get -u github.com/micro/go-plugins/
 RUN go get -u github.com/micro/protobuf/protoc-gen-go
 RUN go get -u github.com/micro/protoc-gen-micro
 
+# k8s
+RUN go get -u k8s.io/client-go@kubernetes-1.16.0
+RUN go get -u k8s.io/api/core/v1
+RUN go get -u k8s.io/apimachinery/pkg/apis/meta/v1
+RUN go get -u k8s.io/apimachinery/pkg/fields
+
 # linq
 RUN go get -u github.com/ahmetb/go-linq
 
@@ -40,6 +46,7 @@ RUN go get -u github.com/fsnotify/fsnotify
 RUN go get -u github.com/hashicorp/hcl
 RUN go get -u github.com/imdario/mergo
 RUN go get -u github.com/bitly/go-simplejson
+RUN go get -u github.com/spf13/pflag
 
 # support utf8
 RUN apt-get update

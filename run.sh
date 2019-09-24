@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/baseimages bash
 
 go run ./grpc/server.go --registry=consul --server_address=localhost:20001
 go run ./gateway/server.go
