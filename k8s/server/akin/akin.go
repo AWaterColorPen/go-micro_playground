@@ -9,12 +9,12 @@ import (
 	"github.com/micro/go-plugins/wrapper/trace/opentracing"
 	_opentracing "github.com/opentracing/opentracing-go"
 	log "github.com/sirupsen/logrus"
-	tencho "go-micro_playground/k8s/proto"
-	"go-micro_playground/k8s/util"
+	tencho "gomicro-playground/k8s/proto"
+	"gomicro-playground/k8s/util"
 )
 
 type Akin struct{
-	client tencho.NatsuService
+	client tencho.NatSuService
 }
 
 func (g *Akin) A(ctx context.Context, in *tencho.Request, out *tencho.Response) error {
@@ -60,8 +60,11 @@ func main() {
 
 	service.Init()
 	akin := new(Akin)
-	akin.client = tencho.NewNatsuService("natsu", service.Client())
-	tencho.RegisterAkinHandler(service.Server(), akin)
+	akin.client = tencho.NewNatSuService("natsu", service.Client())
+	if err := tencho.RegisterAkinHandler(service.Server(), akin); err != nil {
+		log.Fatal(err)
+	}
+
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
 	}

@@ -5,7 +5,7 @@ import (
 	"flag"
 	"github.com/golang/glog"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	tosui "go-micro_playground/proto/api"
+	tosui "gomicro-playground/proto/api"
 	"google.golang.org/grpc"
 	"net/http"
 )

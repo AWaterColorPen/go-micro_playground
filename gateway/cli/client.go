@@ -4,8 +4,8 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	tosui "go-micro_playground/proto"
-	api "go-micro_playground/proto/api"
+	tosui "gomicro-playground/proto"
+	api "gomicro-playground/proto/api"
 	"google.golang.org/grpc"
 )
 

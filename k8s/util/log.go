@@ -3,10 +3,10 @@ package util
 import (
 	"fmt"
 	"github.com/lestrrat-go/file-rotatelogs"
-	"github.com/olivere/elastic"
+	"github.com/olivere/elastic/v7"
 	"github.com/rifflock/lfshook"
 	log "github.com/sirupsen/logrus"
-	"github.com/sohlich/elogrus"
+	"gopkg.in/sohlich/elogrus.v7"
 	"io/ioutil"
 	"time"
 )

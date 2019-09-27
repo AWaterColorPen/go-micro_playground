@@ -4,6 +4,6 @@ package tencho;
 
 import "k8s/proto/common.proto";
 
-service Natsu {
+service NatSu {
     rpc A(Request) returns (Response) {}
 }

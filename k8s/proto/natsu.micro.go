@@ -31,32 +31,32 @@ var _ context.Context
 var _ client.Option
 var _ server.Option
 
-// Client API for Natsu service
+// Client API for NatSu service
 
-type NatsuService interface {
+type NatSuService interface {
 	A(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 }
 
-type natsuService struct {
+type natSuService struct {
 	c    client.Client
 	name string
 }
 
-func NewNatsuService(name string, c client.Client) NatsuService {
+func NewNatSuService(name string, c client.Client) NatSuService {
 	if c == nil {
 		c = client.NewClient()
 	}
 	if len(name) == 0 {
 		name = "tencho"
 	}
-	return &natsuService{
+	return &natSuService{
 		c:    c,
 		name: name,
 	}
 }
 
-func (c *natsuService) A(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.name, "Natsu.A", in)
+func (c *natSuService) A(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "NatSu.A", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -65,27 +65,27 @@ func (c *natsuService) A(ctx context.Context, in *Request, opts ...client.CallOp
 	return out, nil
 }
 
-// Server API for Natsu service
+// Server API for NatSu service
 
-type NatsuHandler interface {
+type NatSuHandler interface {
 	A(context.Context, *Request, *Response) error
 }
 
-func RegisterNatsuHandler(s server.Server, hdlr NatsuHandler, opts ...server.HandlerOption) error {
-	type natsu interface {
+func RegisterNatSuHandler(s server.Server, hdlr NatSuHandler, opts ...server.HandlerOption) error {
+	type natSu interface {
 		A(ctx context.Context, in *Request, out *Response) error
 	}
-	type Natsu struct {
-		natsu
+	type NatSu struct {
+		natSu
 	}
-	h := &natsuHandler{hdlr}
-	return s.Handle(s.NewHandler(&Natsu{h}, opts...))
+	h := &natSuHandler{hdlr}
+	return s.Handle(s.NewHandler(&NatSu{h}, opts...))
 }
 
-type natsuHandler struct {
-	NatsuHandler
+type natSuHandler struct {
+	NatSuHandler
 }
 
-func (h *natsuHandler) A(ctx context.Context, in *Request, out *Response) error {
-	return h.NatsuHandler.A(ctx, in, out)
+func (h *natSuHandler) A(ctx context.Context, in *Request, out *Response) error {
+	return h.NatSuHandler.A(ctx, in, out)
 }

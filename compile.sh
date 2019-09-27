@@ -1,4 +1,4 @@
-#!/usr/bin/baseimages bash
+#!/usr/bin bash
 #protoc --proto_path=$GOPATH/src:. --micro_out=. --go_out=plugins=grpc:. --go_out=. proto/shunmu.proto
 
 #protoc -I/usr/local/include -I. \
@@ -13,7 +13,7 @@
 #  proto/api/api.proto
 
 protoc --proto_path=$GOPATH/src:. --micro_out=. --go_out=plugins=grpc:. \
-    k8s/proto/util.proto \
+    k8s/proto/common.proto \
     k8s/proto/akin.proto \
     k8s/proto/natsu.proto \
     k8s/proto/shunmu.proto \

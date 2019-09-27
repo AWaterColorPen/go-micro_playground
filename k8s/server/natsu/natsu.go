@@ -2,24 +2,75 @@ package main
 
 import (
 	"context"
+	"github.com/google/uuid"
 	k8s "github.com/micro/examples/kubernetes/go/micro"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-plugins/wrapper/monitoring/prometheus"
 	"github.com/micro/go-plugins/wrapper/trace/opentracing"
 	_opentracing "github.com/opentracing/opentracing-go"
 	log "github.com/sirupsen/logrus"
-	tencho "go-micro_playground/k8s/proto"
-	"go-micro_playground/k8s/util"
+	tencho "gomicro-playground/k8s/proto"
+	"gomicro-playground/k8s/util"
+	"sync"
 )
 
-type NatSu struct{}
+type NatSu struct{
+	clientS tencho.ShunMuService
+	clientT tencho.ToSuiService
+}
 
-func (g *NatSu) A(ctx context.Context, req *tencho.Request, rsp *tencho.Response) error {
-	rsp.Code = 200
-	log.WithFields(log.Fields{
+func (g *NatSu) A(ctx context.Context, in *tencho.Request, out *tencho.Response) error {
+	id := in.Name
+	if id == "" {
+		id = uuid.New().String()
+	}
+
+	fields := log.Fields{
 		"serviceName": "NatSu",
-	}).Info(req)
+		"Id": id,
+	}
+
+	out.Code = 400
+	log.WithFields(fields).Info(in)
+	var wg sync.WaitGroup
+
+	go func() {
+		wg.Add(1)
+		rsp, err := g.clientS.A(context.Background(), &tencho.Request{
+			Name: id,
+			Query: in.Query,
+		})
+
+		if err != nil {
+			log.WithFields(fields).Error(err)
+		} else {
+			log.WithFields(fields).Info(rsp)
+		}
+
+		wg.Done()
+	}()
+
+	go func() {
+		wg.Add(1)
+		rsp, err := g.clientT.A(context.Background(), &tencho.Request{
+			Name: id,
+			Query: in.Query,
+		})
+
+		if err != nil {
+			log.WithFields(fields).Error(err)
+		} else {
+			log.WithFields(fields).Info(rsp)
+		}
+
+		wg.Done()
+	}()
+
+	wg.Wait()
+	out.Code = 200
+
 	return nil
+
 }
 
 func main() {
@@ -35,7 +86,13 @@ func main() {
 	)
 
 	service.Init()
-	tencho.RegisterAkinHandler(service.Server(), new(NatSu))
+	natsu := new(NatSu)
+	natsu.clientS = tencho.NewShunMuService("shunmu", service.Client())
+	natsu.clientT = tencho.NewToSuiService("tosui", service.Client())
+	if err := tencho.RegisterAkinHandler(service.Server(), natsu); err != nil {
+		log.Fatal(err)
+	}
+
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
 	}

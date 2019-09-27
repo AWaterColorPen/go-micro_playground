@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/server/grpc"
-	tosui "go-micro_playground/proto"
+	tosui "gomicro-playground/proto"
 	"log"
 	"time"
 )
@@ -26,7 +26,10 @@ func main() {
 	)
 
 	service.Init()
-	tosui.RegisterTosuiHandler(service.Server(), new(Tosui))
+	if err := tosui.RegisterTosuiHandler(service.Server(), new(Tosui)); err != nil {
+		log.Fatal(err)
+	}
+
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
 	}
