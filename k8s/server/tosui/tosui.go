@@ -38,7 +38,7 @@ func main() {
 	util.Initlog()
 
 	service := k8s.NewService(
-		micro.Name("tosui"),
+		micro.Name("anst.tosui"),
 		micro.Version("latest"),
 		micro.WrapHandler(prometheus.NewHandlerWrapper()),
 		micro.WrapHandler(

@@ -1,0 +1,192 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: default
+  name: anst-akin
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: akin
+    spec:
+      containers:
+        - name: akin
+          command: [
+            "akin",
+            "--selector=static",
+            "--registry=consul",
+            "--registry_address=10.110.186.24",
+            "--server_address=0.0.0.0:8080",
+            "--broker_address=0.0.0.0:10001"
+          ]
+          image: gomicrok8s:1.0.1
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+              name: akin-port
+        - name: api
+          args:
+            - "--selector=static"
+            - "--registry=consul"
+            - "--registry_address=10.110.186.24"
+            - "--api_namespace=anst"
+            - "--api_address=0.0.0.0:80"
+            - "api"
+          image: microhq/micro:kubernetes
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: api-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: anst-akin
+  labels:
+    app: akin
+spec:
+  ports:
+    - port: 8080
+      name: akin-port
+    - port: 80
+      name: api-port
+  selector:
+    app: akin
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: default
+  name: anst-natsu
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: natsu
+    spec:
+      containers:
+        - name: natsu
+          command: [
+            "natsu",
+            "--selector=static",
+            "--registry=consul",
+            "--registry_address=10.110.186.24",
+            "--server_address=0.0.0.0:8080",
+            "--broker_address=0.0.0.0:10001"
+          ]
+          image: gomicrok8s:1.0.1
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+              name: natsu-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: anst-natsu
+  labels:
+    app: natsu
+spec:
+  ports:
+    - port: 8080
+  selector:
+    app: natsu
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: default
+  name: anst-shunmu
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: shunmu
+    spec:
+      containers:
+        - name: shunmu
+          command: [
+            "shunmu",
+            "--selector=static",
+            "--registry=consul",
+            "--registry_address=10.110.186.24",
+            "--server_address=0.0.0.0:8080",
+            "--broker_address=0.0.0.0:10001"
+          ]
+          image: gomicrok8s:1.0.1
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+              name: shunmu-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: anst-shunmu
+  labels:
+    app: shunmu
+spec:
+  ports:
+    - port: 8080
+  selector:
+    app: shunmu
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: default
+  name: anst-tosui
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tosui
+    spec:
+      containers:
+        - name: tosui
+          command: [
+            "tosui",
+            "--selector=static",
+            "--registry=consul",
+            "--registry_address=10.110.186.24",
+            "--server_address=0.0.0.0:8080",
+            "--broker_address=0.0.0.0:10001"
+          ]
+          image: gomicrok8s:1.0.1
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+              name: tosui-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: anst-tosui
+  labels:
+    app: tosui
+spec:
+  ports:
+    - port: 8080
+  selector:
+    app: tosui
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: anst-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: true
+spec:
+  rules:
+    - host: anst.local
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: anst-akin
+              servicePort: 80

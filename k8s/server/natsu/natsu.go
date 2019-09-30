@@ -77,7 +77,7 @@ func main() {
 	util.Initlog()
 
 	service := k8s.NewService(
-		micro.Name("natsu"),
+		micro.Name("anst.natsu"),
 		micro.Version("latest"),
 		micro.WrapHandler(prometheus.NewHandlerWrapper()),
 		micro.WrapHandler(
@@ -87,8 +87,8 @@ func main() {
 
 	service.Init()
 	natsu := new(NatSu)
-	natsu.clientS = tencho.NewShunMuService("shunmu", service.Client())
-	natsu.clientT = tencho.NewToSuiService("tosui", service.Client())
+	natsu.clientS = tencho.NewShunMuService("anst.shunmu", service.Client())
+	natsu.clientT = tencho.NewToSuiService("anst.tosui", service.Client())
 	if err := tencho.RegisterAkinHandler(service.Server(), natsu); err != nil {
 		log.Fatal(err)
 	}
