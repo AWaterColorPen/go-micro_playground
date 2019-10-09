@@ -36,6 +36,7 @@ func (g *ToSui) A(ctx context.Context, in *tencho.Request, out *tencho.Response)
 
 func main() {
 	util.Initlog()
+	log.Info("anst.tosui start")
 
 	service := k8s.NewService(
 		micro.Name("anst.tosui"),

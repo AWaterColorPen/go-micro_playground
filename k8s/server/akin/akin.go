@@ -48,6 +48,7 @@ func (g *Akin) A(ctx context.Context, in *tencho.Request, out *tencho.Response) 
 
 func main() {
 	util.Initlog()
+	log.Info("anst.akin start")
 
 	service := k8s.NewService(
 		micro.Name("anst.akin"),

@@ -15,12 +15,8 @@ spec:
           command: [
             "akin",
             "--selector=static",
-            "--registry=consul",
-            "--registry_address=10.110.186.24",
-            "--server_address=0.0.0.0:8080",
-            "--broker_address=0.0.0.0:10001"
           ]
-          image: gomicrok8s:1.0.1
+          image: gomicrok8s:1.0.2
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -28,11 +24,8 @@ spec:
         - name: api
           args:
             - "--selector=static"
-            - "--registry=consul"
-            - "--registry_address=10.110.186.24"
-            - "--api_namespace=anst"
-            - "--api_address=0.0.0.0:80"
-            - "api"
+            - "--web_address=0.0.0.0:80"
+            - "web"
           image: microhq/micro:kubernetes
           imagePullPolicy: Always
           ports:
@@ -71,12 +64,8 @@ spec:
           command: [
             "natsu",
             "--selector=static",
-            "--registry=consul",
-            "--registry_address=10.110.186.24",
-            "--server_address=0.0.0.0:8080",
-            "--broker_address=0.0.0.0:10001"
           ]
-          image: gomicrok8s:1.0.1
+          image: gomicrok8s:1.0.2
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -111,12 +100,8 @@ spec:
           command: [
             "shunmu",
             "--selector=static",
-            "--registry=consul",
-            "--registry_address=10.110.186.24",
-            "--server_address=0.0.0.0:8080",
-            "--broker_address=0.0.0.0:10001"
           ]
-          image: gomicrok8s:1.0.1
+          image: gomicrok8s:1.0.2
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -151,12 +136,8 @@ spec:
           command: [
             "tosui",
             "--selector=static",
-            "--registry=consul",
-            "--registry_address=10.110.186.24",
-            "--server_address=0.0.0.0:8080",
-            "--broker_address=0.0.0.0:10001"
           ]
-          image: gomicrok8s:1.0.1
+          image: gomicrok8s:1.0.2
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
