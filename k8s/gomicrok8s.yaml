@@ -15,13 +15,14 @@ spec:
           command: [
             "akin",
             "--selector=static",
+            "--server_address=:8080",
           ]
-          image: gomicrok8s:1.0.2
+          image: gomicrok8s:1.0.3
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
               name: akin-port
-        - name: api
+        - name: web
           args:
             - "--selector=static"
             - "--web_address=0.0.0.0:80"
@@ -30,6 +31,18 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 80
+              name: web-port
+        - name: api
+          args:
+            - "--selector=static"
+            - "--api_namespace=anst"
+            - "--api_handler=rpc"
+            - "--api_address=0.0.0.0:81"
+            - "api"
+          image: microhq/micro:kubernetes
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 81
               name: api-port
 ---
 apiVersion: v1
@@ -43,6 +56,8 @@ spec:
     - port: 8080
       name: akin-port
     - port: 80
+      name: web-port
+    - port: 81
       name: api-port
   selector:
     app: akin
@@ -64,8 +79,9 @@ spec:
           command: [
             "natsu",
             "--selector=static",
+            "--server_address=0.0.0.0:8080",
           ]
-          image: gomicrok8s:1.0.2
+          image: gomicrok8s:1.0.3
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -100,8 +116,9 @@ spec:
           command: [
             "shunmu",
             "--selector=static",
+            "--server_address=:8080",
           ]
-          image: gomicrok8s:1.0.2
+          image: gomicrok8s:1.0.3
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -136,8 +153,9 @@ spec:
           command: [
             "tosui",
             "--selector=static",
+            "--server_address=:8080",
           ]
-          image: gomicrok8s:1.0.2
+          image: gomicrok8s:1.0.3
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -171,3 +189,7 @@ spec:
             backend:
               serviceName: anst-akin
               servicePort: 80
+          - path: /api
+            backend:
+              serviceName: anst-akin
+              servicePort: 81

@@ -75,10 +75,10 @@ func (g *NatSu) A(ctx context.Context, in *tencho.Request, out *tencho.Response)
 
 func main() {
 	util.Initlog()
-	log.Info("anst.natsu start")
+	log.Info("anst-natsu start")
 
 	service := k8s.NewService(
-		micro.Name("anst.natsu"),
+		micro.Name("anst-natsu"),
 		micro.Version("latest"),
 		micro.WrapHandler(prometheus.NewHandlerWrapper()),
 		micro.WrapHandler(
@@ -88,8 +88,8 @@ func main() {
 
 	service.Init()
 	natsu := new(NatSu)
-	natsu.clientS = tencho.NewShunMuService("anst.shunmu", service.Client())
-	natsu.clientT = tencho.NewToSuiService("anst.tosui", service.Client())
+	natsu.clientS = tencho.NewShunMuService("anst-shunmu", service.Client())
+	natsu.clientT = tencho.NewToSuiService("anst-tosui", service.Client())
 	if err := tencho.RegisterAkinHandler(service.Server(), natsu); err != nil {
 		log.Fatal(err)
 	}

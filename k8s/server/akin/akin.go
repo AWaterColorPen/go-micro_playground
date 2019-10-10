@@ -48,10 +48,10 @@ func (g *Akin) A(ctx context.Context, in *tencho.Request, out *tencho.Response) 
 
 func main() {
 	util.Initlog()
-	log.Info("anst.akin start")
+	log.Info("anst-akin start")
 
 	service := k8s.NewService(
-		micro.Name("anst.akin"),
+		micro.Name("anst-akin"),
 		micro.Version("latest"),
 		micro.WrapHandler(prometheus.NewHandlerWrapper()),
 		micro.WrapHandler(
@@ -61,7 +61,7 @@ func main() {
 
 	service.Init()
 	akin := new(Akin)
-	akin.client = tencho.NewNatSuService("anst.natsu", service.Client())
+	akin.client = tencho.NewNatSuService("anst-natsu", service.Client())
 	if err := tencho.RegisterAkinHandler(service.Server(), akin); err != nil {
 		log.Fatal(err)
 	}
