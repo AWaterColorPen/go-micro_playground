@@ -12,7 +12,6 @@ import (
 	log "github.com/sirupsen/logrus"
 	tencho "gomicro-playground/k8s/proto"
 	"gomicro-playground/k8s/util"
-	"github.com/micro/go-micro/client"
 )
 
 type Akin struct{
@@ -36,7 +35,7 @@ func (g *Akin) A(ctx context.Context, in *tencho.Request, out *tencho.Response) 
 	rsp, err := g.client.A(context.Background(), &tencho.Request{
 		Name: id,
 		Query: in.Query,
-	})
+	}, )
 
 	if err != nil {
 		log.WithFields(fields).Error(err)
@@ -50,20 +49,20 @@ func (g *Akin) A(ctx context.Context, in *tencho.Request, out *tencho.Response) 
 
 func qaz(service micro.Service)  {
 	c := cron.New()
-	c.AddFunc("10 * * * *", func() {
-		service := util.NewService(
-			micro.Name("anst-akin-client"),
+	c.AddFunc("0/10 * * * *", func() {
+		srv := k8s.NewService(
+			micro.Name("anst-shunmu-client"),
 			micro.Version("latest"),
 		)
 
-		cli := tencho.NewAkinService("anst-akin", service.Client())
+		cli := tencho.NewShunMuService("anst-shunmu", srv.Client())
 		rsp, err := cli.A(context.Background(), &tencho.Request{
 			Name:                 uuid.New().String(),
 			Query:                uuid.New().String(),
 		})
 
 		fields := log.Fields{
-			"caller": "util anst-akin-client",
+			"caller": "k8s anst-shunmu-client",
 		}
 
 		if err != nil {
@@ -73,15 +72,15 @@ func qaz(service micro.Service)  {
 		}
 	})
 
-	c.AddFunc("10 * * * *", func() {
-		cli := tencho.NewAkinService("anst-akin", service.Client())
+	c.AddFunc("0/10 * * * *", func() {
+		cli := tencho.NewShunMuService("anst-shunmu", service.Client())
 		rsp, err := cli.A(context.Background(), &tencho.Request{
 			Name:                 uuid.New().String(),
 			Query:                uuid.New().String(),
 		})
 
 		fields := log.Fields{
-			"caller": "util anst-akin",
+			"caller": "k8s anst-shunmu",
 		}
 
 		if err != nil {
@@ -91,7 +90,25 @@ func qaz(service micro.Service)  {
 		}
 	})
 
-	c.AddFunc("10 * * * *", func() {
+	c.AddFunc("0/10 * * * *", func() {
+		cli := tencho.NewToSuiService("anst-tosui", service.Client())
+		rsp, err := cli.A(context.Background(), &tencho.Request{
+			Name:                 uuid.New().String(),
+			Query:                uuid.New().String(),
+		})
+
+		fields := log.Fields{
+			"caller": "k8s anst-tosui",
+		}
+
+		if err != nil {
+			log.WithFields(fields).Error(err)
+		} else {
+			log.WithFields(fields).Info(rsp)
+		}
+	})
+
+	c.AddFunc("0/10 * * * *", func() {
 		service := k8s.NewService(
 			micro.Name("anst-tosui-client"),
 			micro.Version("latest"),
@@ -114,87 +131,6 @@ func qaz(service micro.Service)  {
 		}
 	})
 
-	c.AddFunc("10 * * * *", func() {
-		cli := tencho.NewAkinService("anst-tosui", service.Client())
-		rsp, err := cli.A(context.Background(), &tencho.Request{
-			Name:                 uuid.New().String(),
-			Query:                uuid.New().String(),
-		})
-
-		fields := log.Fields{
-			"caller": "util anst-tosui",
-		}
-
-		if err != nil {
-			log.WithFields(fields).Error(err)
-		} else {
-			log.WithFields(fields).Info(rsp)
-		}
-	})
-
-	c.AddFunc("10 * * * *", func() {
-		req := client.NewRequest("anst-akin", "Akin.A", &tencho.Request{
-			Name:                 uuid.New().String(),
-			Query:                uuid.New().String(),
-		})
-
-		rsp := &tencho.Response{}
-
-		err := client.Call(context.Background(), req, rsp)
-
-		fields := log.Fields{
-			"caller": "client anst-akin",
-		}
-
-		if err != nil {
-			log.WithFields(fields).Error(err)
-		} else {
-			log.WithFields(fields).Info(rsp)
-		}
-	})
-
-	c.AddFunc("10 * * * *", func() {
-		req := client.NewRequest("anst-tosui", "ToSui.A", &tencho.Request{
-			Name:                 uuid.New().String(),
-			Query:                uuid.New().String(),
-		})
-
-		rsp := &tencho.Response{}
-
-		err := client.Call(context.Background(), req, rsp)
-
-		fields := log.Fields{
-			"caller": "client anst-tosui",
-		}
-
-		if err != nil {
-			log.WithFields(fields).Error(err)
-		} else {
-			log.WithFields(fields).Info(rsp)
-		}
-	})
-
-	c.AddFunc("10 * * * *", func() {
-		req := client.NewRequest("anst-tosui", "Akin.A", &tencho.Request{
-			Name:                 uuid.New().String(),
-			Query:                uuid.New().String(),
-		})
-
-		rsp := &tencho.Response{}
-
-		err := client.Call(context.Background(), req, rsp)
-
-		fields := log.Fields{
-			"caller": "client anst-tosui Akin.A ?",
-		}
-
-		if err != nil {
-			log.WithFields(fields).Error(err)
-		} else {
-			log.WithFields(fields).Info(rsp)
-		}
-	})
-
 	c.Start()
 }
 
@@ -202,7 +138,7 @@ func main() {
 	util.Initlog()
 	log.Info("anst-akin start")
 
-	service := util.NewService(
+	service := k8s.NewService(
 		micro.Name("anst-akin"),
 		micro.Version("latest"),
 		micro.WrapHandler(prometheus.NewHandlerWrapper()),
@@ -218,7 +154,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	qaz()
+	qaz(service)
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
 	}

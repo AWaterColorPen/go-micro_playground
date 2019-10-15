@@ -1,7 +1,6 @@
 module gomicro-playground
 
 replace (
-	github.com/lucas-clemente/quic-go => github.com/lucas-clemente/quic-go v0.7.1-0.20190913061013-f15a82d3fdc3
 	k8s.io/api => k8s.io/api v0.0.0-20190813180838-e711354a0280
 	k8s.io/apimachinery => k8s.io/apimachinery v0.0.0-20190813060636-0c17871ad6fd
 	k8s.io/client-go => k8s.io/client-go v0.0.0-20190620085101-78d2af792bab
