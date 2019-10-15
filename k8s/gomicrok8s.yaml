@@ -17,7 +17,7 @@ spec:
             "--selector=static",
             "--server_address=:8080",
           ]
-          image: gomicrok8s:1.0.3
+          image: gomicrok8s:1.0.5
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -32,18 +32,6 @@ spec:
           ports:
             - containerPort: 80
               name: web-port
-        - name: api
-          args:
-            - "--selector=static"
-            - "--api_namespace=anst"
-            - "--api_handler=rpc"
-            - "--api_address=0.0.0.0:81"
-            - "api"
-          image: microhq/micro:kubernetes
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 81
-              name: api-port
 ---
 apiVersion: v1
 kind: Service
@@ -57,8 +45,6 @@ spec:
       name: akin-port
     - port: 80
       name: web-port
-    - port: 81
-      name: api-port
   selector:
     app: akin
 ---
@@ -81,7 +67,7 @@ spec:
             "--selector=static",
             "--server_address=0.0.0.0:8080",
           ]
-          image: gomicrok8s:1.0.3
+          image: gomicrok8s:1.0.5
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -118,7 +104,7 @@ spec:
             "--selector=static",
             "--server_address=:8080",
           ]
-          image: gomicrok8s:1.0.3
+          image: gomicrok8s:1.0.5
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -155,7 +141,7 @@ spec:
             "--selector=static",
             "--server_address=:8080",
           ]
-          image: gomicrok8s:1.0.3
+          image: gomicrok8s:1.0.5
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -189,7 +175,3 @@ spec:
             backend:
               serviceName: anst-akin
               servicePort: 80
-          - path: /api
-            backend:
-              serviceName: anst-akin
-              servicePort: 81

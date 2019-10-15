@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"github.com/google/uuid"
-	k8s "github.com/micro/examples/kubernetes/go/micro"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-plugins/wrapper/monitoring/prometheus"
 	"github.com/micro/go-plugins/wrapper/trace/opentracing"
@@ -38,7 +37,7 @@ func main() {
 	util.Initlog()
 	log.Info("anst-shunmu start")
 
-	service := k8s.NewService(
+	service := util.NewService(
 		micro.Name("anst-shunmu"),
 		micro.Version("latest"),
 		micro.WrapHandler(prometheus.NewHandlerWrapper()),
