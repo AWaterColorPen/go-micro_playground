@@ -48,7 +48,7 @@ func main() {
 	)
 
 	service.Init()
-	if err := tencho.RegisterAkinHandler(service.Server(), new(ShunMu)); err != nil {
+	if err := tencho.RegisterShunMuHandler(service.Server(), new(ShunMu)); err != nil {
 		log.Fatal(err)
 	}
 

@@ -17,7 +17,7 @@ spec:
             "--selector=static",
             "--server_address=:8080",
           ]
-          image: gomicrok8s:1.0.7
+          image: gomicrok8s:1.0.9
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -67,7 +67,7 @@ spec:
             "--selector=static",
             "--server_address=0.0.0.0:8080",
           ]
-          image: gomicrok8s:1.0.7
+          image: gomicrok8s:1.0.9
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -104,7 +104,7 @@ spec:
             "--selector=static",
             "--server_address=:8080",
           ]
-          image: gomicrok8s:1.0.7
+          image: gomicrok8s:1.0.9
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
@@ -141,7 +141,7 @@ spec:
             "--selector=static",
             "--server_address=:8080",
           ]
-          image: gomicrok8s:1.0.7
+          image: gomicrok8s:1.0.9
           imagePullPolicy: Never
           ports:
             - containerPort: 8080

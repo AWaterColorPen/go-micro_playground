@@ -1,4 +1,4 @@
-FROM golang:latest
+FROM hub.docker.com/_/golanggolang:latest
 
 WORKDIR /app
 ADD . .

@@ -90,7 +90,7 @@ func main() {
 	natsu := new(NatSu)
 	natsu.clientS = tencho.NewShunMuService("anst-shunmu", service.Client())
 	natsu.clientT = tencho.NewToSuiService("anst-tosui", service.Client())
-	if err := tencho.RegisterAkinHandler(service.Server(), natsu); err != nil {
+	if err := tencho.RegisterNatSuHandler(service.Server(), natsu); err != nil {
 		log.Fatal(err)
 	}
 
