@@ -1,4 +1,4 @@
-FROM registry.hub.docker.com/library/golang:latest
+FROM golang:latest
 
 WORKDIR /app
 ADD . .
