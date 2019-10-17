@@ -36,9 +36,9 @@ func GetElasticLogOption() *ElasticLogOption {
 }
 
 func _rotateLog(loglevel log.Level) *rotatelogs.RotateLogs {
-	logfile := fmt.Sprintf("%v/log-%v", rotateLog.Dir, loglevel)
+	logfile := fmt.Sprintf("%v/%v", rotateLog.Dir, loglevel)
 	rotateLog, err := rotatelogs.New(
-		logfile + ".%Y%m%d%H%M",
+		logfile + ".%Y%m%d%H%M.log",
 		rotatelogs.WithLinkName(logfile),
 		rotatelogs.WithMaxAge(time.Hour * 24),
 		rotatelogs.WithRotationTime(time.Hour),

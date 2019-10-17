@@ -10,9 +10,9 @@ package tosui_api
 
 import (
 	"context"
-	"go-micro_playground/proto"
 	"io"
 	"net/http"
+	"proto"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"

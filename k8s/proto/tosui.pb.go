@@ -4,12 +4,8 @@
 package tencho
 
 import (
-	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	math "math"
 )
 
@@ -35,84 +31,4 @@ var fileDescriptor_525dd802aeaaf54d = []byte{
 	0x21, 0x7e, 0x3d, 0x88, 0x72, 0xbd, 0xa0, 0xd4, 0xc2, 0xd2, 0xd4, 0xe2, 0x12, 0x29, 0x01, 0x84,
 	0x40, 0x71, 0x41, 0x7e, 0x5e, 0x71, 0xaa, 0x12, 0x43, 0x12, 0x1b, 0x58, 0xa7, 0x31, 0x20, 0x00,
 	0x00, 0xff, 0xff, 0x28, 0x89, 0xe1, 0x98, 0x72, 0x00, 0x00, 0x00,
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConn
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
-
-// ToSuiClient is the client API for ToSui service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type ToSuiClient interface {
-	A(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
-}
-
-type toSuiClient struct {
-	cc *grpc.ClientConn
-}
-
-func NewToSuiClient(cc *grpc.ClientConn) ToSuiClient {
-	return &toSuiClient{cc}
-}
-
-func (c *toSuiClient) A(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
-	out := new(Response)
-	err := c.cc.Invoke(ctx, "/tencho.ToSui/A", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// ToSuiServer is the server API for ToSui service.
-type ToSuiServer interface {
-	A(context.Context, *Request) (*Response, error)
-}
-
-// UnimplementedToSuiServer can be embedded to have forward compatible implementations.
-type UnimplementedToSuiServer struct {
-}
-
-func (*UnimplementedToSuiServer) A(ctx context.Context, req *Request) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method A not implemented")
-}
-
-func RegisterToSuiServer(s *grpc.Server, srv ToSuiServer) {
-	s.RegisterService(&_ToSui_serviceDesc, srv)
-}
-
-func _ToSui_A_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Request)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ToSuiServer).A(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/tencho.ToSui/A",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ToSuiServer).A(ctx, req.(*Request))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _ToSui_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "tencho.ToSui",
-	HandlerType: (*ToSuiServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "A",
-			Handler:    _ToSui_A_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "k8s/proto/tosui.proto",
 }

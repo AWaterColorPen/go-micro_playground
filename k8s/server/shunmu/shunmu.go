@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	k8s "github.com/micro/examples/kubernetes/go/micro"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/server/grpc"
 	"github.com/micro/go-plugins/wrapper/monitoring/prometheus"
 	"github.com/micro/go-plugins/wrapper/trace/opentracing"
 	_opentracing "github.com/opentracing/opentracing-go"
@@ -39,6 +40,7 @@ func main() {
 	log.Info("anst-shunmu start")
 
 	service := k8s.NewService(
+		micro.Server(grpc.NewServer(grpc.MaxMsgSize(50 * 1024 * 1024))),
 		micro.Name("anst-shunmu"),
 		micro.Version("latest"),
 		micro.WrapHandler(prometheus.NewHandlerWrapper()),

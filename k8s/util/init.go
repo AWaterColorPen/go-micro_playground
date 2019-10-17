@@ -2,6 +2,7 @@ package util
 
 import (
 	"github.com/micro/go-micro/config"
+	"github.com/micro/go-micro/config/source/env"
 	"github.com/micro/go-plugins/config/source/configmap"
 	"net"
 )
@@ -23,18 +24,19 @@ func currentIpAddress() string {
 	return ""
 }
 
+func getNamespace() string {
+	conf := config.NewConfig()
+	_ = conf.Load(env.NewSource())
+	return conf.Get("NAMESPACE").String("default")
+}
+
 func init() {
-	configMapSource := configmap.NewSource(
-		//configmap.WithNamespace("go-micro"),
-		configmap.WithName("micro"),
-	)
+	_ = config.Load(
+		env.NewSource(env.WithStrippedPrefix("MICRO")),
+		configmap.NewSource(
+			configmap.WithNamespace(getNamespace()),
+			configmap.WithName("micro")))
 
-	//consulSource := consul.NewSource(
-	//	consul.WithAddress("consul.local"),
-	//	configmap.WithName("/micro/config"),
-	//)
-
-	_ = config.Load(configMapSource)
 	_ = config.Get("file_log").Scan(GetRotateLogOption())
 	_ = config.Get("elastic").Scan(GetElasticLogOption())
 }

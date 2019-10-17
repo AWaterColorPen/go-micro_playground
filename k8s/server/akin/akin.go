@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	k8s "github.com/micro/examples/kubernetes/go/micro"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/server/grpc"
 	"github.com/micro/go-plugins/wrapper/monitoring/prometheus"
 	"github.com/micro/go-plugins/wrapper/trace/opentracing"
 	_opentracing "github.com/opentracing/opentracing-go"
@@ -72,64 +73,6 @@ func qaz(service micro.Service)  {
 		}
 	})
 
-	c.AddFunc("0/10 * * * *", func() {
-		cli := tencho.NewShunMuService("anst-shunmu", service.Client())
-		rsp, err := cli.A(context.Background(), &tencho.Request{
-			Name:                 uuid.New().String(),
-			Query:                uuid.New().String(),
-		})
-
-		fields := log.Fields{
-			"caller": "k8s anst-shunmu",
-		}
-
-		if err != nil {
-			log.WithFields(fields).Error(err)
-		} else {
-			log.WithFields(fields).Info(rsp)
-		}
-	})
-
-	c.AddFunc("0/10 * * * *", func() {
-		cli := tencho.NewToSuiService("anst-tosui", service.Client())
-		rsp, err := cli.A(context.Background(), &tencho.Request{
-			Name:                 uuid.New().String(),
-			Query:                uuid.New().String(),
-		})
-
-		fields := log.Fields{
-			"caller": "k8s anst-tosui",
-		}
-
-		if err != nil {
-			log.WithFields(fields).Error(err)
-		} else {
-			log.WithFields(fields).Info(rsp)
-		}
-	})
-
-	c.AddFunc("0/10 * * * *", func() {
-		service := k8s.NewService(
-			micro.Name("anst-tosui-client"),
-			micro.Version("latest"),
-		)
-
-		cli := tencho.NewAkinService("anst-tosui", service.Client())
-		rsp, err := cli.A(context.Background(), &tencho.Request{
-			Name:                 uuid.New().String(),
-			Query:                uuid.New().String(),
-		})
-
-		fields := log.Fields{
-			"caller": "k8s anst-tosui-client",
-		}
-
-		if err != nil {
-			log.WithFields(fields).Error(err)
-		} else {
-			log.WithFields(fields).Info(rsp)
-		}
-	})
 
 	c.Start()
 }
@@ -139,6 +82,7 @@ func main() {
 	log.Info("anst-akin start")
 
 	service := k8s.NewService(
+		micro.Server(grpc.NewServer(grpc.MaxMsgSize(50 * 1024 * 1024))),
 		micro.Name("anst-akin"),
 		micro.Version("latest"),
 		micro.WrapHandler(prometheus.NewHandlerWrapper()),

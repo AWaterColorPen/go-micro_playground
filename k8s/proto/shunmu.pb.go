@@ -4,12 +4,8 @@
 package tencho
 
 import (
-	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	math "math"
 )
 
@@ -35,84 +31,4 @@ var fileDescriptor_ec8dedf21e5a5758 = []byte{
 	0x8e, 0x42, 0xfc, 0x7a, 0x10, 0xf5, 0x7a, 0x41, 0xa9, 0x85, 0xa5, 0xa9, 0xc5, 0x25, 0x52, 0x02,
 	0x08, 0x81, 0xe2, 0x82, 0xfc, 0xbc, 0xe2, 0x54, 0x25, 0x86, 0x24, 0x36, 0xb0, 0x56, 0x63, 0x40,
 	0x00, 0x00, 0x00, 0xff, 0xff, 0xe5, 0x52, 0xf0, 0x2e, 0x74, 0x00, 0x00, 0x00,
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConn
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
-
-// ShunMuClient is the client API for ShunMu service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type ShunMuClient interface {
-	A(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
-}
-
-type shunMuClient struct {
-	cc *grpc.ClientConn
-}
-
-func NewShunMuClient(cc *grpc.ClientConn) ShunMuClient {
-	return &shunMuClient{cc}
-}
-
-func (c *shunMuClient) A(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
-	out := new(Response)
-	err := c.cc.Invoke(ctx, "/tencho.ShunMu/A", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// ShunMuServer is the server API for ShunMu service.
-type ShunMuServer interface {
-	A(context.Context, *Request) (*Response, error)
-}
-
-// UnimplementedShunMuServer can be embedded to have forward compatible implementations.
-type UnimplementedShunMuServer struct {
-}
-
-func (*UnimplementedShunMuServer) A(ctx context.Context, req *Request) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method A not implemented")
-}
-
-func RegisterShunMuServer(s *grpc.Server, srv ShunMuServer) {
-	s.RegisterService(&_ShunMu_serviceDesc, srv)
-}
-
-func _ShunMu_A_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Request)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ShunMuServer).A(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/tencho.ShunMu/A",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ShunMuServer).A(ctx, req.(*Request))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _ShunMu_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "tencho.ShunMu",
-	HandlerType: (*ShunMuServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "A",
-			Handler:    _ShunMu_A_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "k8s/proto/shunmu.proto",
 }

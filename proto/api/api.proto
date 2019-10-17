@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package tosui.api;
 
-import "go-micro_playground/proto/demo.proto";
+import "proto/demo.proto";
 import "google/api/annotations.proto";
 
 service Tosui {

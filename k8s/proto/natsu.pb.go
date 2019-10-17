@@ -4,12 +4,8 @@
 package tencho
 
 import (
-	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	math "math"
 )
 
@@ -35,84 +31,4 @@ var fileDescriptor_62c83e16860cf79b = []byte{
 	0x21, 0x7e, 0x3d, 0x88, 0x72, 0xbd, 0xa0, 0xd4, 0xc2, 0xd2, 0xd4, 0xe2, 0x12, 0x29, 0x01, 0x84,
 	0x40, 0x71, 0x41, 0x7e, 0x5e, 0x71, 0xaa, 0x12, 0x43, 0x12, 0x1b, 0x58, 0xa7, 0x31, 0x20, 0x00,
 	0x00, 0xff, 0xff, 0x96, 0xd8, 0x25, 0x7f, 0x72, 0x00, 0x00, 0x00,
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConn
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
-
-// NatSuClient is the client API for NatSu service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type NatSuClient interface {
-	A(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
-}
-
-type natSuClient struct {
-	cc *grpc.ClientConn
-}
-
-func NewNatSuClient(cc *grpc.ClientConn) NatSuClient {
-	return &natSuClient{cc}
-}
-
-func (c *natSuClient) A(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error) {
-	out := new(Response)
-	err := c.cc.Invoke(ctx, "/tencho.NatSu/A", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// NatSuServer is the server API for NatSu service.
-type NatSuServer interface {
-	A(context.Context, *Request) (*Response, error)
-}
-
-// UnimplementedNatSuServer can be embedded to have forward compatible implementations.
-type UnimplementedNatSuServer struct {
-}
-
-func (*UnimplementedNatSuServer) A(ctx context.Context, req *Request) (*Response, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method A not implemented")
-}
-
-func RegisterNatSuServer(s *grpc.Server, srv NatSuServer) {
-	s.RegisterService(&_NatSu_serviceDesc, srv)
-}
-
-func _NatSu_A_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Request)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(NatSuServer).A(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/tencho.NatSu/A",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NatSuServer).A(ctx, req.(*Request))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _NatSu_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "tencho.NatSu",
-	HandlerType: (*NatSuServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "A",
-			Handler:    _NatSu_A_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "k8s/proto/natsu.proto",
 }
