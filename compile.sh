@@ -12,7 +12,7 @@
 #  --grpc-gateway_out=logtostderr=true:. \
 #  proto/api/api.proto
 
-protoc --proto_path=$GOPATH/src:. --micro_out=. --go_out=$GOPATH/src \
+protoc --proto_path=$GOPATH/src:. --micro_out=. --go_out=. \
     k8s/proto/common.proto \
     k8s/proto/akin.proto \
     k8s/proto/natsu.proto \
