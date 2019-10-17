@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/micro/go-micro"
-	tosui "go-micro_playground/proto"
+	tosui "gomicro-playground/proto"
 	"log"
 )
 

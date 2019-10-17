@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/micro/go-micro/service/grpc"
-	tosui "go-micro_playground/proto"
+	tosui "gomicro-playground/proto"
 )
 
 func main() {
