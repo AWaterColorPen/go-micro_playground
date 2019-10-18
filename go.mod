@@ -5,6 +5,7 @@ go 1.13
 replace (
 	k8s.io/api => k8s.io/api v0.0.0-20191016225839-816a9b7df678
 	k8s.io/apimachinery => k8s.io/apimachinery v0.0.0-20191016225534-b1267f8c42b4
+	k8s.io/client-go => k8s.io/client-go v0.0.0-20190620085101-78d2af792bab
 )
 
 require (

@@ -35,12 +35,15 @@ func (g *ShunMu) A(ctx context.Context, in *tencho.Request, out *tencho.Response
 
 }
 
+func init() {
+	grpc.DefaultMaxMsgSize = 50 * 1024 * 1024
+}
+
 func main() {
 	util.Initlog()
 	log.Info("anst-shunmu start")
 
 	service := k8s.NewService(
-		micro.Server(grpc.NewServer(grpc.MaxMsgSize(50 * 1024 * 1024))),
 		micro.Name("anst-shunmu"),
 		micro.Version("latest"),
 		micro.WrapHandler(prometheus.NewHandlerWrapper()),
