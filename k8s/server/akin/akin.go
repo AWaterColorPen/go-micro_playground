@@ -51,19 +51,14 @@ func (g *Akin) A(ctx context.Context, in *tencho.Request, out *tencho.Response) 
 func qaz(service micro.Service)  {
 	c := cron.New()
 	c.AddFunc("0/10 * * * *", func() {
-		srv := k8s.NewService(
-			micro.Name("anst-shunmu-client"),
-			micro.Version("latest"),
-		)
-
-		cli := tencho.NewShunMuService("anst-shunmu", srv.Client())
+		cli := tencho.NewAkinService("anst-akin", service.Client())
 		rsp, err := cli.A(context.Background(), &tencho.Request{
 			Name:                 uuid.New().String(),
 			Query:                uuid.New().String(),
 		})
 
 		fields := log.Fields{
-			"caller": "k8s anst-shunmu-client",
+			"caller": "k8s anst-akin",
 		}
 
 		if err != nil {
@@ -72,7 +67,6 @@ func qaz(service micro.Service)  {
 			log.WithFields(fields).Info(rsp)
 		}
 	})
-
 
 	c.Start()
 }
