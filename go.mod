@@ -11,8 +11,6 @@ require (
 	github.com/lestrrat-go/strftime v1.0.1 // indirect
 	github.com/micro/examples v0.2.0
 	github.com/micro/go-micro v1.18.0
-	github.com/micro/go-plugins/config/source/configmap v0.0.0-20200119172437-4fe21aa238fd // indirect
-	github.com/micro/go-plugins/wrapper/monitoring/prometheus v0.0.0-20200119172437-4fe21aa238fd // indirect
 	github.com/olivere/elastic/v7 v7.0.12
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
 	github.com/robfig/cron/v3 v3.0.1

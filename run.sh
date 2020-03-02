@@ -1,2 +1,2 @@
-docker build -t gomicrok8s:1.0.8 -f k8s/Dockerfile .
+docker build -t gomicrok8s:1.2.0 -f k8s/Dockerfile .
 kubectl apply -f k8s/gomicrok8s.yaml
