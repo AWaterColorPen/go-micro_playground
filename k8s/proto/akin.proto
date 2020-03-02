@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package tencho;
-
-import "k8s/proto/common.proto";
-
-service Akin {
-    rpc A(Request) returns (Response) {}
-}

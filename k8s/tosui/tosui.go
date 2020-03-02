@@ -2,21 +2,19 @@ package main
 
 import (
 	"context"
+	"github.com/AWaterColorPen/go-micro_playground/common"
+	tencho "github.com/AWaterColorPen/go-micro_playground/proto"
 	"github.com/google/uuid"
 	k8s "github.com/micro/examples/kubernetes/go/micro"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/server/grpc"
 	"github.com/micro/go-plugins/wrapper/monitoring/prometheus"
-	"github.com/micro/go-plugins/wrapper/trace/opentracing"
-	_opentracing "github.com/opentracing/opentracing-go"
 	log "github.com/sirupsen/logrus"
-	tencho "gomicro-playground/k8s/proto"
-	"gomicro-playground/k8s/util"
 )
 
 type ToSui struct{}
 
-func (g *ToSui) A(ctx context.Context, in *tencho.Request, out *tencho.Response) error {
+func (g *ToSui) Call(ctx context.Context, in *tencho.Request, out *tencho.Response) error {
 	id := in.Name
 	if id == "" {
 		id = uuid.New().String()
@@ -37,23 +35,20 @@ func (g *ToSui) A(ctx context.Context, in *tencho.Request, out *tencho.Response)
 
 func init() {
 	grpc.DefaultMaxMsgSize = 50 * 1024 * 1024
+	common.Init(map[string]interface{}{})
 }
 
 func main() {
-	util.Initlog()
 	log.Info("anst-tosui start")
 
 	service := k8s.NewService(
 		micro.Name("anst-tosui"),
 		micro.Version("latest"),
 		micro.WrapHandler(prometheus.NewHandlerWrapper()),
-		micro.WrapHandler(
-			opentracing.NewHandlerWrapper(_opentracing.GlobalTracer()),
-		),
 	)
 
 	service.Init()
-	if err := tencho.RegisterToSuiHandler(service.Server(), new(ToSui)); err != nil {
+	if err := tencho.RegisterToSuiHandler(service.Server(), &ToSui{}); err != nil {
 		log.Fatal(err)
 	}
 

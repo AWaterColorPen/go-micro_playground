@@ -1,4 +1,4 @@
-package util
+package logger
 
 import (
 	"fmt"
@@ -22,21 +22,18 @@ type ElasticLogOption struct {
 	IndexName	string `json:"index"`
 }
 
+type Metadata struct {
+	Ip			string `json:"ip"`
+}
+
 var (
-	rotateLog RotateLogOption
-	elasticLog ElasticLogOption
+	RotateLog RotateLogOption
+	ElasticLog ElasticLogOption
+	meta Metadata
 )
 
-func GetRotateLogOption() *RotateLogOption {
-	return &rotateLog
-}
-
-func GetElasticLogOption() *ElasticLogOption {
-	return &elasticLog
-}
-
 func _rotateLog(loglevel log.Level) *rotatelogs.RotateLogs {
-	logfile := fmt.Sprintf("%v/%v", rotateLog.Dir, loglevel)
+	logfile := fmt.Sprintf("%v/%v", RotateLog.Dir, loglevel)
 	rotateLog, err := rotatelogs.New(
 		logfile + ".%Y%m%d%H%M.log",
 		rotatelogs.WithLinkName(logfile),
@@ -60,14 +57,14 @@ func _log4localFilesystem()  {
 			log.ErrorLevel: _rotateLog(log.ErrorLevel),
 			log.FatalLevel: _rotateLog(log.FatalLevel),
 		},
-		&log.TextFormatter{FullTimestamp: true},
+		&log.JSONFormatter{},
 	))
 }
 
 func _log4elasticSearch() {
 	client, err := elastic.NewClient(
-		elastic.SetURL(elasticLog.Url),
-		elastic.SetBasicAuth(elasticLog.UserName, elasticLog.Password),
+		elastic.SetURL(ElasticLog.Url),
+		elastic.SetBasicAuth(ElasticLog.UserName, ElasticLog.Password),
 		elastic.SetSniff(false))
 
 	if err != nil {
@@ -75,7 +72,7 @@ func _log4elasticSearch() {
 		return
 	}
 
-	hook, err := elogrus.NewAsyncElasticHook(client, currentIpAddress(), log.TraceLevel, elasticLog.IndexName)
+	hook, err := elogrus.NewAsyncElasticHook(client, meta.Ip, log.TraceLevel, ElasticLog.IndexName)
 	if err != nil {
 		log.Error(err)
 		return
@@ -84,7 +81,8 @@ func _log4elasticSearch() {
 	log.AddHook(hook)
 }
 
-func Initlog() {
+func Init(metadata Metadata) {
+	meta = metadata
 	log.SetLevel(log.InfoLevel)
 	log.SetReportCaller(true)
 	log.SetOutput(ioutil.Discard)

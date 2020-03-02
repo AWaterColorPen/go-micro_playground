@@ -1,25 +1,23 @@
 package main
 
 import (
-	"context"
+    "context"
+	"github.com/AWaterColorPen/go-micro_playground/common"
+	tencho "github.com/AWaterColorPen/go-micro_playground/proto"
 	"github.com/google/uuid"
 	k8s "github.com/micro/examples/kubernetes/go/micro"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/server/grpc"
 	"github.com/micro/go-plugins/wrapper/monitoring/prometheus"
-	"github.com/micro/go-plugins/wrapper/trace/opentracing"
-	_opentracing "github.com/opentracing/opentracing-go"
 	"github.com/robfig/cron/v3"
 	log "github.com/sirupsen/logrus"
-	tencho "gomicro-playground/k8s/proto"
-	"gomicro-playground/k8s/util"
 )
 
 type Akin struct{
-	client tencho.NatSuService
+	client tencho.ToSuiService
 }
 
-func (g *Akin) A(ctx context.Context, in *tencho.Request, out *tencho.Response) error {
+func (g *Akin) Call(ctx context.Context, in *tencho.Request, out *tencho.Response) error {
 	id := in.Name
 	if id == "" {
 		id = uuid.New().String()
@@ -33,7 +31,7 @@ func (g *Akin) A(ctx context.Context, in *tencho.Request, out *tencho.Response) 
 	out.Code = 400
 	log.WithFields(fields).Info(in)
 
-	rsp, err := g.client.A(context.Background(), &tencho.Request{
+	rsp, err := g.client.Call(context.Background(), &tencho.Request{
 		Name: id,
 		Query: in.Query,
 	}, )
@@ -50,11 +48,11 @@ func (g *Akin) A(ctx context.Context, in *tencho.Request, out *tencho.Response) 
 
 func qaz(service micro.Service)  {
 	c := cron.New()
-	c.AddFunc("0/10 * * * *", func() {
+	_, _ = c.AddFunc("0/10 * * * *", func() {
 		cli := tencho.NewAkinService("anst-akin", service.Client())
-		rsp, err := cli.A(context.Background(), &tencho.Request{
-			Name:                 uuid.New().String(),
-			Query:                uuid.New().String(),
+		rsp, err := cli.Call(context.Background(), &tencho.Request{
+			Name:  uuid.New().String(),
+			Query: uuid.New().String(),
 		})
 
 		fields := log.Fields{
@@ -73,24 +71,20 @@ func qaz(service micro.Service)  {
 
 func init() {
 	grpc.DefaultMaxMsgSize = 50 * 1024 * 1024
+	common.Init(map[string]interface{}{})
 }
 
 func main() {
-	util.Initlog()
 	log.Info("anst-akin start")
 
 	service := k8s.NewService(
 		micro.Name("anst-akin"),
 		micro.Version("latest"),
 		micro.WrapHandler(prometheus.NewHandlerWrapper()),
-		micro.WrapHandler(
-			opentracing.NewHandlerWrapper(_opentracing.GlobalTracer()),
-		),
 	)
 
 	service.Init()
-	akin := new(Akin)
-	akin.client = tencho.NewNatSuService("anst-natsu", service.Client())
+	akin := &Akin{client: tencho.NewToSuiService("anst-tosui", service.Client())}
 	if err := tencho.RegisterAkinHandler(service.Server(), akin); err != nil {
 		log.Fatal(err)
 	}
