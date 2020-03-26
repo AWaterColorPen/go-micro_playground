@@ -6,9 +6,9 @@ import (
 	tencho "github.com/AWaterColorPen/go-micro_playground/proto"
 	"github.com/google/uuid"
 	k8s "github.com/micro/examples/kubernetes/go/micro"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/server/grpc"
-	"github.com/micro/go-plugins/wrapper/monitoring/prometheus"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/server/grpc"
+	"github.com/micro/go-plugins/wrapper/monitoring/prometheus/v2"
 	log "github.com/sirupsen/logrus"
 )
 

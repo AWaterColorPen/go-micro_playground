@@ -3,10 +3,9 @@ package common
 import (
 	"fmt"
 	"github.com/AWaterColorPen/go-micro_playground/common/logger"
-	"github.com/micro/go-micro/config"
-	"github.com/micro/go-micro/config/source/env"
-	"github.com/micro/go-micro/config/source/file"
-	"github.com/micro/go-plugins/config/source/configmap"
+	"github.com/micro/go-micro/v2/config"
+	"github.com/micro/go-micro/v2/config/source/env"
+	"github.com/micro/go-micro/v2/config/source/file"
 	log "github.com/sirupsen/logrus"
 	"net"
 )
@@ -29,7 +28,7 @@ func currentIpAddress() string {
 }
 
 func getNamespace() string {
-	conf := config.NewConfig()
+	conf, _ := config.NewConfig()
 	_ = conf.Load(env.NewSource())
 	return conf.Get("NAMESPACE").String("default")
 }
@@ -38,9 +37,6 @@ func initConfig()  {
 	if err := config.Load(
 		env.NewSource(env.WithStrippedPrefix("MICRO")),
 		file.NewSource(file.WithPath(fmt.Sprintf("/config/%v", file.DefaultPath))),
-			configmap.NewSource(
-				configmap.WithNamespace(getNamespace()),
-				configmap.WithName("micro")),
 	); err != nil {
 		fmt.Println(err)
 	}

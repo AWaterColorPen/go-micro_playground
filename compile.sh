@@ -1,4 +1,13 @@
-protoc --plugin=protoc-gen-go=/Users/slyao/go/bin/protoc-gen-go --plugin=protoc-gen-micro=/Users/slyao/go/bin/protoc-gen-micro --micro_out=. --go_out=. \
+protoc --micro_out=. --go_out=. \
     proto/common.proto \
     proto/akin.proto \
     proto/tosui.proto
+
+protoc --grpc-gateway_out=grpc_api_configuration=gw/akin.yaml:. --go_out=plugins=grpc:. \
+   proto/akin.proto
+
+cp -r github.com/AWaterColorPen/go_micro_playground/tencho/. ./proto
+rm -rf github.com
+
+#cp -r gw/github.com/AWaterColorPen/go_micro_playground/tencho/. ./gw/proto
+#rm -rf gw/github.com

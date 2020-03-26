@@ -1,14 +1,13 @@
 package main
 
 import (
-    "context"
+	"context"
 	"github.com/AWaterColorPen/go-micro_playground/common"
 	tencho "github.com/AWaterColorPen/go-micro_playground/proto"
 	"github.com/google/uuid"
-	k8s "github.com/micro/examples/kubernetes/go/micro"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/server/grpc"
-	"github.com/micro/go-plugins/wrapper/monitoring/prometheus"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/server/grpc"
+	"github.com/micro/go-plugins/wrapper/monitoring/prometheus/v2"
 	"github.com/robfig/cron/v3"
 	log "github.com/sirupsen/logrus"
 )
@@ -77,7 +76,7 @@ func init() {
 func main() {
 	log.Info("anst-akin start")
 
-	service := k8s.NewService(
+	service := micro.NewService(
 		micro.Name("anst-akin"),
 		micro.Version("latest"),
 		micro.WrapHandler(prometheus.NewHandlerWrapper()),

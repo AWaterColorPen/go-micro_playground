@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package tencho;
 
+option go_package = "github.com/AWaterColorPen/go_micro_playground/tencho";
 import "proto/common.proto";
 
 service Akin {
