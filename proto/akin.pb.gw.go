@@ -67,12 +67,12 @@ func RegisterAkinHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux,
 		}()
 	}()
 
-	return RegisterAkinHandler0(ctx, mux, conn)
+	return RegisterAkinHandler(ctx, mux, conn)
 }
 
 // RegisterAkinHandler registers the http handlers for service Akin to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterAkinHandler0(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+func RegisterAkinHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
 	return RegisterAkinHandlerClient(ctx, mux, NewAkinClient(conn))
 }
 
