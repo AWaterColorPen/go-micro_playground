@@ -9,8 +9,8 @@ protoc --grpc-gateway_out=grpc_api_configuration=proto/akin.yaml:. \
 cp -r github.com/AWaterColorPen/go_micro_playground/tencho/. ./proto
 rm -rf github.com
 
-for f in proto/*.pb.gw.go
+for file in proto/*.pb.gw.go
 do
-  sed -i '' 's/Register\([A-Za-z]*\)Handler(/Register\1Handler_(/g' "$f"
+  sed -i '' 's/Register\([A-Za-z]*\)Handler(/Register\1Handler_(/g' "$file"
 done
 
