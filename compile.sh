@@ -6,7 +6,7 @@ protoc --micro_out=. --go_out=plugins=grpc:. \
 protoc --grpc-gateway_out=grpc_api_configuration=proto/akin.yaml:. \
    proto/akin.proto
 
-cp -r github.com/AWaterColorPen/go_micro_playground/tencho/. ./proto
+cp -r github.com/AWaterColorPen/go-micro_playground/tencho/. ./proto
 rm -rf github.com
 
 for file in proto/*.pb.gw.go

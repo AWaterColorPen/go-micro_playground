@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/AWaterColorPen/go-micro_playground/common"
-	tencho "github.com/AWaterColorPen/go-micro_playground/proto"
+	"github.com/AWaterColorPen/go-micro_playground/proto"
 	"github.com/google/uuid"
 	"github.com/micro/go-micro/v2"
 	"github.com/micro/go-micro/v2/server/grpc"

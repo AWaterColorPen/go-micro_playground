@@ -2,7 +2,7 @@ package main
 
 import (
     "context"
-    "github.com/AWaterColorPen/go_micro_playground/proto"
+    "github.com/AWaterColorPen/go-micro_playground/proto"
     "github.com/micro/go-micro/v2"
     "github.com/micro/go-plugins/wrapper/monitoring/prometheus/v2"
     pr "github.com/prometheus/client_golang/prometheus"

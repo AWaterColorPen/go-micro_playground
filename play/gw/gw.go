@@ -9,7 +9,7 @@ import (
     "github.com/grpc-ecosystem/grpc-gateway/runtime"
     "google.golang.org/grpc"
 
-    "github.com/AWaterColorPen/go_micro_playground/proto"
+    "github.com/AWaterColorPen/go-micro_playground/proto"
 )
 
 var (
