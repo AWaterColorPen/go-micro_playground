@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"github.com/AWaterColorPen/go-micro_playground/common"
+	"github.com/AWaterColorPen/go-micro_playground/common/logger"
 	"github.com/AWaterColorPen/go-micro_playground/proto"
 	"github.com/google/uuid"
 	"github.com/micro/go-micro/v2"
@@ -33,7 +34,7 @@ func (g *Akin) Call(ctx context.Context, in *tencho.Request, out *tencho.Respons
 	rsp, err := g.client.Call(context.Background(), &tencho.Request{
 		Name: id,
 		Query: in.Query,
-	}, )
+	})
 
 	if err != nil {
 		log.WithFields(fields).Error(err)
@@ -47,7 +48,7 @@ func (g *Akin) Call(ctx context.Context, in *tencho.Request, out *tencho.Respons
 
 func qaz(service micro.Service)  {
 	c := cron.New()
-	_, _ = c.AddFunc("0/10 * * * *", func() {
+	_, _ = c.AddFunc("0/2 * * * *", func() {
 		cli := tencho.NewAkinService("anst-akin", service.Client())
 		rsp, err := cli.Call(context.Background(), &tencho.Request{
 			Name:  uuid.New().String(),
@@ -70,7 +71,11 @@ func qaz(service micro.Service)  {
 
 func init() {
 	grpc.DefaultMaxMsgSize = 50 * 1024 * 1024
-	common.Init(map[string]interface{}{})
+	logger.RotateLog.Dir = ""
+	common.InitOption(
+		common.LoadConfig(),
+		logger.Log4local(),
+	)
 }
 
 func main() {

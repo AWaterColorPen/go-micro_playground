@@ -2,13 +2,14 @@ package logger
 
 import (
 	"fmt"
+	"io/ioutil"
+	"time"
+
 	"github.com/lestrrat-go/file-rotatelogs"
 	"github.com/olivere/elastic/v7"
 	"github.com/rifflock/lfshook"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/sohlich/elogrus.v7"
-	"io/ioutil"
-	"time"
 )
 
 type RotateLogOption struct {
@@ -29,11 +30,17 @@ type Metadata struct {
 var (
 	RotateLog RotateLogOption
 	ElasticLog ElasticLogOption
-	meta Metadata
+	Meta Metadata
 )
 
-func _rotateLog(loglevel log.Level) *rotatelogs.RotateLogs {
-	logfile := fmt.Sprintf("%v/%v", RotateLog.Dir, loglevel)
+func init() {
+	log.SetLevel(log.InfoLevel)
+	log.SetReportCaller(true)
+	log.SetOutput(ioutil.Discard)
+}
+
+func rotateLog(dir string, loglevel log.Level) *rotatelogs.RotateLogs {
+	logfile := fmt.Sprintf("%v/%v", dir, loglevel)
 	rotateLog, err := rotatelogs.New(
 		logfile + ".%Y%m%d%H%M.log",
 		rotatelogs.WithLinkName(logfile),
@@ -48,20 +55,34 @@ func _rotateLog(loglevel log.Level) *rotatelogs.RotateLogs {
 	return rotateLog
 }
 
-func _log4localFilesystem()  {
+func log4local(dir string)  {
 	log.AddHook(lfshook.NewHook(
 		lfshook.WriterMap{
-			log.TraceLevel: _rotateLog(log.TraceLevel),
-			log.InfoLevel:  _rotateLog(log.InfoLevel),
-			log.WarnLevel:  _rotateLog(log.WarnLevel),
-			log.ErrorLevel: _rotateLog(log.ErrorLevel),
-			log.FatalLevel: _rotateLog(log.FatalLevel),
+			log.TraceLevel: rotateLog(dir, log.TraceLevel),
+			log.DebugLevel: rotateLog(dir, log.DebugLevel),
+			log.InfoLevel:  rotateLog(dir, log.InfoLevel),
+			log.WarnLevel:  rotateLog(dir, log.WarnLevel),
+			log.ErrorLevel: rotateLog(dir, log.ErrorLevel),
+			log.FatalLevel: rotateLog(dir, log.FatalLevel),
 		},
-		&log.JSONFormatter{},
+		&log.JSONFormatter{
+			TimestampFormat: time.RFC3339Nano,
+		},
 	))
 }
 
-func _log4elasticSearch() {
+func Log4local() func() {
+	return func() {
+		if RotateLog.Dir == "" {
+			log.Error("log 4 local failed. empty rotate log dir")
+			return
+		}
+
+		log4local(RotateLog.Dir)
+	}
+}
+
+func log4elasticSearch() {
 	client, err := elastic.NewClient(
 		elastic.SetURL(ElasticLog.Url),
 		elastic.SetBasicAuth(ElasticLog.UserName, ElasticLog.Password),
@@ -72,7 +93,7 @@ func _log4elasticSearch() {
 		return
 	}
 
-	hook, err := elogrus.NewAsyncElasticHook(client, meta.Ip, log.TraceLevel, ElasticLog.IndexName)
+	hook, err := elogrus.NewAsyncElasticHook(client, Meta.Ip, log.InfoLevel, ElasticLog.IndexName)
 	if err != nil {
 		log.Error(err)
 		return
@@ -81,11 +102,17 @@ func _log4elasticSearch() {
 	log.AddHook(hook)
 }
 
-func Init(metadata Metadata) {
-	meta = metadata
-	log.SetLevel(log.InfoLevel)
-	log.SetReportCaller(true)
-	log.SetOutput(ioutil.Discard)
-	_log4elasticSearch()
-	_log4localFilesystem()
+func Log4elasticSearch() func() {
+	return func() {
+		if Meta.Ip == "" ||
+			ElasticLog.Url == "" ||
+			ElasticLog.UserName == "" ||
+			ElasticLog.Password == "" ||
+			ElasticLog.IndexName == "" {
+			log.Error("log 4 elastic search failed. invalid meta option or elastic log option", Meta, ElasticLog)
+			return
+		}
+
+		log4elasticSearch()
+	}
 }

@@ -23,7 +23,7 @@ func main() {
         micro.Name("greeter"),
         micro.Version("fuck"),
         micro.WrapHandler(
-            prometheus.NewHandlerWrapper(),),
+            prometheus.NewHandlerWrapper()),
     )
 
     push.New("http://pushgateway.domain.com/metrics", "Gao").Gatherer(pr.DefaultGatherer)

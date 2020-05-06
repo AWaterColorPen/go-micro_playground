@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"github.com/AWaterColorPen/go-micro_playground/common"
+	"github.com/AWaterColorPen/go-micro_playground/common/logger"
 	"github.com/AWaterColorPen/go-micro_playground/proto"
 	"github.com/google/uuid"
 	"github.com/micro/go-micro/v2"
@@ -32,7 +33,11 @@ func (g *ToSui) Call(ctx context.Context, in *tencho.Request, out *tencho.Respon
 }
 
 func init() {
-	common.Init(map[string]interface{}{})
+	logger.RotateLog.Dir = ""
+	common.InitOption(
+		common.LoadConfig(),
+		logger.Log4local(),
+	)
 }
 
 func main() {
