@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package tosui;
+option go_package = "github.com/awatercolorpen/micro-playground/proto/tosui";
+
+import "proto/common/common.proto";
+
+service ToSui {
+    rpc Call(common.Request) returns (common.Response) {}
+}

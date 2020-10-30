@@ -1,16 +1,8 @@
-protoc --micro_out=. --go_out=plugins=grpc:. \
-    proto/common.proto \
-    proto/akin.proto \
-    proto/tosui.proto
+protoc --go_out=paths=source_relative:. \
+    proto/common/common.proto
 
-protoc --grpc-gateway_out=grpc_api_configuration=proto/akin.yaml:. \
-   proto/akin.proto
+protoc --micro_out=paths=source_relative:. --go_out=paths=source_relative:. \
+    proto/akin/akin.proto
 
-cp -r github.com/AWaterColorPen/go-micro_playground/tencho/. ./proto
-rm -rf github.com
-
-for file in proto/*.pb.gw.go
-do
-  sed -i '' 's/Register\([A-Za-z]*\)Handler(/Register\1Handler_(/g' "$file"
-done
-
+protoc --micro_out=paths=source_relative:. --go_out=paths=source_relative:. \
+    proto/tosui/tosui.proto

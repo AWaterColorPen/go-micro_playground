@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-option go_package = "github.com/AWaterColorPen/go-micro_playground/tencho";
-package tencho;
+package common;
+option go_package = "github.com/awatercolorpen/micro-playground/proto/common";
 
 message Request {
     string name = 1;
