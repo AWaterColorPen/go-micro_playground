@@ -1,6 +1,8 @@
 # nitro_playground
 
-## install
+> it is a playground project to learning [nitro](https://github.com/asim/nitro)
+
+## install nitro
 
 ```shell
 go get github.com/asim/protoc-gen-nitro/v3
