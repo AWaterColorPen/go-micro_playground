@@ -11,3 +11,9 @@ message Request {
 message Response {
     uint32 code = 1;
 }
+
+enum SERVICE_NAME {
+    UNKNOWN = 0;
+    AKIN = 1;
+    TOSUI = 2;
+}

@@ -10,6 +10,7 @@ import (
     "github.com/asim/nitro/v3/service"
     "github.com/awatercolorpen/nitro-playground/proto/akin"
     "github.com/awatercolorpen/nitro-playground/proto/common"
+    "github.com/awatercolorpen/nitro-playground/proto/tosui"
 )
 
 type handler struct {
@@ -23,12 +24,15 @@ func (h *handler) Call(ctx context.Context, in *common.Request, out *common.Resp
 
 func main() {
     nitro := grpc.NewService(
-        service.Name(common.SERVICE_NAME_AKIN.String()),
+        service.Name(common.SERVICE_NAME_TOSUI.String()),
         service.Registry(etcd.NewRegistry(registry.Addrs())),
     )
     nitro.Init()
 
-    _ = akin.RegisterAkinHandler(nitro.Server(), &handler{})
+    srv := akin.NewAkinService(common.SERVICE_NAME_AKIN.String(), nitro.Client())
+    log.Print(srv.Call(context.Background(), &common.Request{Name: "play ground"}))
+
+    _ = tosui.RegisterToSuiHandler(nitro.Server(), &handler{})
     if err := nitro.Run(); err != nil {
         log.Fatal(err)
     }
