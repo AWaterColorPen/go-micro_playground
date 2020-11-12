@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package akin;
-option go_package = "github.com/awatercolorpen/micro-playground/proto/akin";
+option go_package = "github.com/awatercolorpen/nitro-playground/proto/akin";
 
 import "proto/common/common.proto";
 

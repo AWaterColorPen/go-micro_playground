@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package tosui;
-option go_package = "github.com/awatercolorpen/micro-playground/proto/tosui";
+option go_package = "github.com/awatercolorpen/nitro-playground/proto/tosui";
 
 import "proto/common/common.proto";
 
